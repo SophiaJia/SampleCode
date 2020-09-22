@@ -1,7 +1,6 @@
-# 20200213
 # This sample code is to purduce bayesian hierarchical logistic model for meta-analysis
 
-#install.packages("BRugs", configure.args = c(Rmpfr = "--with-openbugs=/Users/jiax/.wine/drive_c/Program Files (x86)/OpenBUGS/OpenBUGS323"))
+#install.packages("BRugs", configure.args = c(Rmpfr = "--with-openbugs=/Users/.wine/drive_c/Program Files (x86)/OpenBUGS/OpenBUGS323"))
 
 
 library(readxl)
@@ -16,7 +15,7 @@ library("colorRamps")
 library(forestplot)
 library(rmeta)
 
-D <- read_excel("~/Documents/ccf/IBTR_whole Meta/BTreatmentMete/list.xlsx")
+D <- read_excel("~/Documents/list.xlsx")
 
 D <- D %>% separate(`Years Conducted`, c("A", "B"))
 
@@ -73,32 +72,6 @@ sumS <- summary(S)
 #saveRDS(S,"postSamps-1.RDS")
 xlsx::write.xlsx(sumS[[1]], file="post-sum-1.xlsx", sheetName="moments", row.names=TRUE ); AP=TRUE
 xlsx::write.xlsx(sumS[[2]], file="post-sum-1.xlsx", append=AP, sheetName="quantiles", row.names=TRUE )
-
-
-# ### time by treatment ###
-# ### Time constant ###
-# 
-# bugdata <- list(n.1=length(A[[1]]$RecurN), NRec.1=A[[1]]$RecurN, N.1=A[[1]]$N.margin, x.1=A[[1]]$midDur-2000, 
-#                 n.2=length(A[[2]]$RecurN), NRec.2=A[[2]]$RecurN, N.2=A[[2]]$N.margin, x.2=A[[2]]$midDur-2000,
-#                 a=0, b=1/200, c=10, d=0, e=0.001) 
-# 
-# inits <- list(mu.1=rep(0,bugdata$n.1), M.1=logit( sum(A[[1]]$RecurN)/sum(A[[1]]$N.margin) ), sd.M.1=1,
-#               mu.2=rep(0,bugdata$n.2), M.2=logit( sum(A[[2]]$RecurN)/sum(A[[2]]$N.margin) ), sd.M.2=1, 
-#               Beta=0)
-# bugsData(bugdata,"bdata.txt"); bugsData(inits,"inits.txt")
-# 
-# m <- jags.model("UnivariateBinMetaReg-2.txt", data=bugdata, inits=inits, n.chains=4, quiet=FALSE)
-# 
-# update(m, 10000, progress.bar="none")
-# S <- coda.samples(m, c("pi.1","pi.2",
-#                        "pr.1","pr.2",
-#                        "M.1","M.2",
-#                        "Beta"), n.iter=30000, progress.bar="none")
-# sumS <- summary(S) #; geweke.diag(S)
-# saveRDS(S,"postSamps-2.RDS")
-# xlsx::write.xlsx(sumS[[1]], file="post-sum-2.xlsx", sheetName="moments", row.names=TRUE ); AP=TRUE
-# xlsx::write.xlsx(sumS[[2]], file="post-sum-2.xlsx", append=AP, sheetName="quantiles", row.names=TRUE )
-
 
 ######################################
 
